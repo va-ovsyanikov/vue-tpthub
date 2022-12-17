@@ -2,8 +2,22 @@
   <v-container fluid>
     <v-row class="d-block">
       <v-progress-linear color="green" indeterminate v-if="loading"></v-progress-linear>
-      <v-data-table :headers="headers" :items="products" :items-per-page="5" :options.sync="options"
-        :server-items-length="totalProducts">
+      <v-data-table 
+        :headers="headers" 
+        :items="products"
+        :items-per-page="5" 
+        :options.sync="options"
+        :server-items-length="totalProducts" 
+        :footer-props="{
+          // showFirstLastPage: true,
+          // firstIcon: 'mdi-arrow-collapse-left',
+          // lastIcon: 'mdi-arrow-collapse-right',
+          // prevIcon: 'mdi-minus',
+          // nextIcon: 'mdi-plus',
+          'items-per-page-text': 'Products per page',
+          'items-per-page-options': [5, 10, 15, 30]
+        }"
+        >
         <template v-slot:item.thumbnail="{ item }">
           <td class="align-center" :style="{ fontSize: '0' }">
             <img :src="item.thumbnail" alt="" :style="{ width: '100px', height: '100px' }">
@@ -40,26 +54,25 @@ export default Vue.extend({
     }
   },
   methods: {
-
     async fetchProducts() {
       try {
         this.loading = true
-// 1
-        // let { page, itemsPerPage } = this.options as IOptions
-        // const data = await fetchAll(page, itemsPerPage)
-        // this.products = data.products
-        // this.totalProducts = data.total
 
-
-//2
-        const data = await fetchAll()
-        this.products = data.products
-        this.totalProducts = data.products.length
+        // 1
         let { page, itemsPerPage } = this.options as IOptions
-        if (itemsPerPage > 0) {
-          this.$router.push(`${this.$route.path}?page=${page}`)
-          this.products = this.products.slice((page - 1) * itemsPerPage, page * itemsPerPage)
-        }
+        const data = await fetchAll(page, itemsPerPage)
+        this.products = data.products
+        this.totalProducts = data.total
+
+        //2
+        // const data = await fetchAll()
+        // this.products = data.products
+        // this.totalProducts = data.products.length
+        // let { page, itemsPerPage } = this.options as IOptions
+        // if (itemsPerPage > 0) {
+        //   this.$router.push(`${this.$route.path}?page=${page}`)
+        //   this.products = this.products.slice((page - 1) * itemsPerPage, page * itemsPerPage)
+        // }
 
         this.loading = false
       } catch (error) {
@@ -67,7 +80,7 @@ export default Vue.extend({
       }
     },
     toPageProduct(id: string) {
-      this.$router.push({ path: `/product/${id}`, params: { id } })
+      this.$router.push({ path: `/product/${id}`})
     }
   },
   watch: {

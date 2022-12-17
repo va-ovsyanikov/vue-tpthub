@@ -4,7 +4,7 @@
             <v-progress-linear indeterminate color="green" height="5"
                 v-if="Object.keys(product).length == 0"></v-progress-linear>
             <v-card class="mx-auto" v-else>
-                <v-btn class="mt-4 ml-4" depressed color="primary" @click="$router.go(-1)">
+                <v-btn class="mt-4 ml-4" depressed color="primary" @click="$router.back()">
                     <v-icon small class="mr-2">
                         mdi-arrow-left-bold
                     </v-icon>
@@ -23,11 +23,11 @@
                 </v-card-text>
 
                 <v-card-actions class="mb-10">
-                    <v-btn color="orange" >
+                    <v-btn color="orange">
                         Add to cart
                     </v-btn>
 
-                    <v-btn color="orange" >
+                    <v-btn color="orange">
                         Buy immediately
                     </v-btn>
                 </v-card-actions>
@@ -40,13 +40,14 @@
             </v-card>
         </v-row>
     </v-container>
+
 </template>
 
 
 <script lang="ts">
 import { IProduct } from '@/types/types';
 import Vue from 'vue'
-import { fetchOne } from '../api/api';
+import { fetchOne } from '@/api/api';
 export default Vue.extend({
     name: 'product',
     data() {
